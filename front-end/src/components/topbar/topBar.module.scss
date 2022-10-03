@@ -1,0 +1,102 @@
+@import "./../../scss_common/mixin";
+@import "./../../scss_common/grid.module.scss";
+
+.topBarContainer {
+    height: $topBar-height;
+    width: 100%;
+    background-color: $main-color;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+
+    .topBar__left {
+        flex: 3;
+        .left__logo {
+            padding: 10px 20px;
+            text-transform: capitalize;
+            letter-spacing: 2px;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    }
+
+    .topBar__center {
+        flex: 5;
+
+        .center__searchBar {
+            height: 30px;
+            background-color: white;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            .searchBar__icon {
+                padding: 0 6px;
+            }
+            .searchBar__input {
+                border: none;
+                width: 80%;
+                font-size: 18px;
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+    }
+
+    .topBar__right {
+        flex: 5;
+        color: white;
+        display: flex;
+        align-items: center;
+        .right__links {
+            flex: 3;
+            display: flex;
+            .links__home,
+            .links__timeline {
+                flex: 3;
+                padding: 8px;
+                text-transform: capitalize;
+                cursor: pointer;
+            }
+        }
+        .right__icons {
+            flex: 2;
+            display: flex;
+            .icons__person,
+            .icons__chat,
+            .icons__notification {
+                padding: 6px;
+                cursor: pointer;
+                position: relative;
+            }
+            .icon__quantity {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 15px;
+                height: 15px;
+                color: white;
+                background-color: red;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                font-size: 12px;
+            }
+        }
+        .right__avatar {
+            @include avatar_small;
+            box-shadow: 0 0 10px white, 0 0 20px white;
+            cursor: pointer;
+            margin-right: 20px;
+            &:hover {
+                box-shadow: 0 0 10px red, 0 0 20px red;
+            }
+        }
+    }
+}
