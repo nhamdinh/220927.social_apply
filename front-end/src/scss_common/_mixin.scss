@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+html {
+    font-family: "Roboto", sans-serif;
+}
+$main-color: #1877f2;
+$shadow-color: #00b3ff;
+$topBar-height: 50px;
+@mixin avatar_small {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+@mixin block_feed {
+    box-shadow: 0px 0px 8px 2px #574e4e;
+    border-radius: 6px;
+    margin: 10px;
+    padding: 8px;
+}
