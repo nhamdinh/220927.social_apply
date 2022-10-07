@@ -1,16 +1,17 @@
 @import "./../../scss_common/mixin";
 @import "./../../scss_common/grid.module.scss";
-
+.topBar__fixed {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+}
 .topBarContainer {
     height: $topBar-height;
     width: 100%;
     background-color: $main-color;
     display: flex;
     align-items: center;
-    position: fixed;
-    top: 0;
-    z-index: 10;
-
     .topBar__left {
         flex: 3;
         .left__logo {
