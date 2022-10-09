@@ -1,0 +1,29 @@
+@import "./../../scss_common/mixin";
+@import "./../../scss_common/grid.module.scss";
+
+.friendsOnline__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    cursor: pointer;
+    .item__img {
+        @include avatar_small;
+        margin-right: 10px;
+    }
+    .item__online {
+        position: absolute;
+        content: "";
+        background-color: limegreen;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: solid 2px white;
+        top: 0;
+        left: 20px;
+    }
+    .item__name {
+        font-weight: 700;
+        text-transform: capitalize;
+    }
+}
