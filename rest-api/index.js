@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 
@@ -10,6 +11,12 @@ const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 
 const app = express();
+app.use(
+    cors({
+        origin: "*",
+        /* , methods: ["POST", "PUT"] */
+    })
+);
 dotenv.config();
 
 mongoose.connect(
@@ -20,7 +27,10 @@ mongoose.connect(
     }
 );
 
-app.use("/images", express.static(path.join(__dirname, "public/images")));
+app.use(
+    "/commons",
+    express.static(path.join(__dirname, "public/images/commons"))
+); // server images
 
 //middleware
 app.use(express.json());
@@ -29,7 +39,7 @@ app.use(morgan("common"));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "public/images");
+        cb(null, "public/images/posts");
     },
     filename: (req, file, cb) => {
         cb(null, req.body.name);

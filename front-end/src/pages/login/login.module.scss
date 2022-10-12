@@ -1,0 +1,89 @@
+@import "./../../scss_common/mixin";
+@import "./../../scss_common/grid.module.scss";
+.loginContainer {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .loginWrapper {
+        width: 70%;
+        height: 70%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .login__left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 10px;
+        .login__left__logo {
+            text-transform: uppercase;
+            color: $main-color;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            margin-bottom: 10px;
+        }
+        .login__left__slogan {
+            font-weight: 500;
+            font-size: 20px;
+        }
+    }
+
+    .login__right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 10px;
+        .right__input__list {
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 4px;
+            padding: 6px;
+
+            .right__input__item {
+                width: 98%;
+                font-size: 20px;
+                line-height: 30px;
+                margin: 2px 0;
+                border: 2px solid gray;
+                border-radius: 4px;
+                padding: 6px;
+                &:focus {
+                    outline: none;
+                }
+            }
+            .right__input__signIn {
+                background-color: #42b72a;
+                color: white;
+                border-radius: 4px;
+                font-size: 20px;
+                line-height: 40px;
+                text-transform: capitalize;
+                display: flex;
+                justify-content: center;
+                cursor: pointer;
+                border: none;
+                &:disabled {
+                    cursor: not-allowed;
+                }
+            }
+            .right__input__signUp {
+                background-color: $main-color;
+                color: white;
+                border-radius: 4px;
+                font-size: 20px;
+                line-height: 40px;
+                text-transform: capitalize;
+                display: flex;
+                justify-content: center;
+                cursor: pointer;
+                width: 70%;
+                margin: auto;
+            }
+        }
+    }
+}
