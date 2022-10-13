@@ -15,8 +15,6 @@ app.use(
     cors({
         origin: "*",
         /* , methods: ["POST", "PUT"] */
-        /* , methods: ["POST", "PUT"] */
-        /* , methods: ["POST", "PUT"] */
     })
 );
 dotenv.config();
@@ -33,6 +31,8 @@ app.use(
     "/commons",
     express.static(path.join(__dirname, "public/images/commons"))
 ); // server images
+app.use("/users", express.static(path.join(__dirname, "public/images/users"))); // server images
+app.use("/posts", express.static(path.join(__dirname, "public/images/posts"))); // server images
 
 //middleware
 app.use(express.json());
@@ -49,6 +49,13 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+app.post("/api/upload", upload.single("file"), (req, res) => {
+    try {
+        return res.status(200).json("File uploaded successfully");
+    } catch (error) {
+        console.error(error);
+    }
+});
 
 app.get("/", (req, res) => {
     res.send("welcome to homepage");
@@ -56,6 +63,9 @@ app.get("/", (req, res) => {
 
 app.get("/users", (req, res) => {
     res.send("welcome to users");
+});
+app.get("/posts", (req, res) => {
+    res.send("welcome to posts");
 });
 
 app.use("/api/users", userRoute);
