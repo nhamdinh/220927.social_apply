@@ -1,11 +1,6 @@
 @import "./../../scss_common/mixin";
 @import "./../../scss_common/grid.module.scss";
-.topBar__fixed {
-    position: fixed;
-    right: 0;
-    left: 0;
-    top: 0;
-}
+
 .topBarContainer {
     height: $topBar-height;
     width: 100%;
@@ -13,7 +8,7 @@
     display: flex;
     align-items: center;
     .topBar__left {
-        flex: 3;
+        flex: 2;
         .left__logo {
             padding: 10px 20px;
             text-transform: capitalize;
@@ -96,7 +91,7 @@
             cursor: pointer;
             margin-right: 20px;
             &:hover {
-                box-shadow: 0 0 10px red, 0 0 20px red;
+                box-shadow: 0 0 10px violet, 0 0 20px violet, 0 0 40px violet;
             }
         }
     }
