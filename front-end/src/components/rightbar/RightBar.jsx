@@ -1,4 +1,5 @@
 import styles from "./rightBar.module.scss";
+import OnlineFriends from "./../onlineFriends/OnlineFriends";
 
 export default function RightBar() {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -25,9 +26,10 @@ export default function RightBar() {
                     <div className={styles.friendsOnline__title}>
                         online friends
                     </div>
+
                     {/*      <ul className={styles.friendsOnline__list}>
                         {Users.map((u) => (
-                            <Online key={u.id} use={u}></Online>
+                            <OnlineFriends key={u.id} use={u}></OnlineFriends>
                         ))}
                     </ul> */}
                 </div>

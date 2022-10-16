@@ -1,2 +1,73 @@
 @import "./../../scss_common/mixin";
 @import "./../../scss_common/grid.module.scss";
+.wallContainer {
+    @include block_feed;
+
+    .wall__top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        .top__left {
+            display: flex;
+            align-items: center;
+            .left__avatar {
+                @include avatar_small;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+            .left__name {
+                margin-right: 10px;
+                text-transform: capitalize;
+                font-weight: 600;
+                cursor: pointer;
+            }
+            .left__date {
+                font-size: 12px;
+            }
+        }
+        .top__right {
+            cursor: pointer;
+        }
+    }
+
+    .wall__center {
+        margin-bottom: 20px;
+
+        .center__content {
+            padding-bottom: 10px;
+        }
+        .center__img {
+            width: 100%;
+            max-height: 500px;
+        }
+    }
+
+    .wall__bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .bottom__left {
+            display: flex;
+            align-items: center;
+            .left__likeIcon {
+                @include avatar_small;
+
+                margin-right: 6px;
+                cursor: pointer;
+            }
+            .left__heartIcon {
+                @include avatar_small;
+                margin-right: 6px;
+                cursor: pointer;
+            }
+            .left__likeCounter {
+            }
+        }
+
+        .bottom__right {
+        }
+    }
+}

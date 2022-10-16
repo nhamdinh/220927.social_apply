@@ -19,7 +19,6 @@ export default function Post() {
     const [preview, setPreview] = useState(null);
     const descRef = useRef();
     const fileInputRef = useRef();
-
     useEffect(() => {
         if (file) {
             const reader = new FileReader();
@@ -48,12 +47,11 @@ export default function Post() {
         }
         try {
             postsCall(newPost);
-            /*             window.location.reload();
-             */
+            alert("The post has been upload success!!");
+            window.location.reload();
         } catch (err) {
             console.log(err);
         }
-        alert("The post has been upload success!!");
     };
     return (
         <div className={styles.postContainer}>
@@ -71,7 +69,12 @@ export default function Post() {
                     className={styles.top__input}
                 />
             </div>
-            <img src={preview} alt="preview" className={styles.post__preview} />
+            <img
+                src={preview}
+                alt="preview"
+                className={styles.post__preview}
+                style={{ display: { preview } == null ? "none" : "block" }}
+            />
             <hr className={styles.post__hr} />
             <form onSubmit={submitHandler} className={styles.post__bottom}>
                 <ul className={styles.bottom__list}>

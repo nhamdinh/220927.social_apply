@@ -1,7 +1,7 @@
 import styles from "./topBar.module.scss";
 import { AuthContext } from "./../../context/AuthContext";
 import { useContext } from "react";
-import { NO_AVATAR } from "./../../const";
+import { IMG_NO_AVATAR, PAGE_PROFILE } from "./../../const";
 import { Search, Person, Chat, NotificationsActive } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 
@@ -43,14 +43,14 @@ export default function TopBar() {
                         <div className={styles.icon__quantity}>6</div>
                     </div>
                 </div>
-                <Link to={`/profile/${user.username}`}>
+                <Link to={`/${PAGE_PROFILE}/${user.username}`}>
                     <img
                         src={
                             user.profilePicture
                                 ? PF + user.profilePicture
-                                : PF + NO_AVATAR
+                                : PF + IMG_NO_AVATAR
                         }
-                        alt="avatar"
+                        alt={IMG_NO_AVATAR}
                         className={styles.right__avatar}
                     />
                 </Link>

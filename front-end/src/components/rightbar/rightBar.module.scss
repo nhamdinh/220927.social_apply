@@ -1,2 +1,95 @@
 @import "./../../scss_common/mixin";
 @import "./../../scss_common/grid.module.scss";
+
+.rightBarContainer {
+    .rightBar__birthday {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        .birthday__gift {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 10px;
+        }
+        .birthday__text {
+            line-height: 20px;
+            strong {
+                font-weight: 600;
+            }
+        }
+    }
+
+    .rightBar__ads {
+        width: 90%;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .rightBar__friendsOnline {
+        .friendsOnline__title {
+            text-transform: capitalize;
+            margin: 10px 0;
+            font-weight: 800;
+        }
+        .friendsOnline__list {
+        }
+    }
+
+    .rightBar__info {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 40px;
+        .rightBar__info__title {
+            text-transform: capitalize;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        .rightBar__info__desc {
+            margin: 4px 0;
+            text-transform: capitalize;
+            display: flex;
+            .rightBar__info__key {
+                width: 120px;
+            }
+            .rightBar__info__value {
+                font-weight: 300;
+            }
+        }
+    }
+
+    .rightBar__following {
+        display: flex;
+        flex-direction: column;
+        .rightBar__following__title {
+            text-transform: capitalize;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        .rightBar__following__list {
+            display: flex;
+            flex-wrap: wrap;
+            .rightBar__following__item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 4px;
+                color: black;
+                &:hover {
+                    color: red;
+                    font-size: 20px;
+                }
+                .following__item__img {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 4px;
+                    object-fit: cover;
+                }
+                .following__item__name {
+                    margin-top: 6px;
+                    font-weight: 10px;
+                }
+            }
+        }
+    }
+}
