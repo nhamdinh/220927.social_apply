@@ -3,7 +3,7 @@
 .topBar__fixed {
     @include topBar__fixed;
 }
-.homeContainer {
+.profileContainer {
     margin-top: $topBar-height + 10px;
     width: 100%;
 }

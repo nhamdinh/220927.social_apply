@@ -1,5 +1,5 @@
 import styles from "./register.module.scss";
-import { useRef, useContext } from "react";
+import { useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerCall } from "../../apiCalls";
 

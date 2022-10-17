@@ -1,15 +1,16 @@
 import styles from "./wall.module.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { MoreVert } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
+import { format } from "timeago.js";
 import {
     IMG_NO_AVATAR,
     IMG_NO_COVER,
     IMG_LIKE,
     IMG_HEART,
 } from "./../../const";
+import { MoreVert } from "@material-ui/icons";
 
 export default function Wall(post) {
     post = post.post;
@@ -48,7 +49,9 @@ export default function Wall(post) {
                     </Link>
 
                     <div className={styles.left__name}>{user.username}</div>
-                    <div className={styles.left__date}>{post.date}</div>
+                    <div className={styles.left__date}>
+                        {format(post.createdAt)}
+                    </div>
                 </div>
                 <MoreVert className={styles.top__right}></MoreVert>
             </div>
