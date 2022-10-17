@@ -1,0 +1,46 @@
+@import "./../../scss_common/mixin";
+@import "./../../scss_common/grid.module.scss";
+.topBar__fixed {
+    @include topBar__fixed;
+}
+.profile__bar {
+    /*     flex: 1;
+ */
+    .images {
+        position: relative;
+        .images__background {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .images__user {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            border: 2px solid white;
+            left: 0;
+            right: 0;
+            margin: auto;
+            top: 150px;
+        }
+    }
+
+    .info {
+        margin-top: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .info__name {
+            text-transform: capitalize;
+            font-size: 24px;
+            line-height: 40px;
+            font-weight: 600;
+        }
+        .info__desc {
+            font-weight: 300;
+        }
+    }
+}
