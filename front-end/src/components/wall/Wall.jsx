@@ -1,9 +1,11 @@
 import styles from "./wall.module.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import { format } from "timeago.js";
+import { AuthContext } from "../../context/AuthContext";
+
 import {
     IMG_NO_AVATAR,
     IMG_NO_COVER,
@@ -17,38 +19,52 @@ export default function Wall(post) {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const POSTS_FOLDER = process.env.REACT_APP_POSTS_FOLDER;
     const USERS_FOLDER = process.env.REACT_APP_USERS_FOLDER;
-    const [like, setLike] = useState(post.likes.length);
+    const [likeCount, setLikeCount] = useState(post.likes.length);
     const [isLiked, setIsLiked] = useState(false);
-    const [user, setUser] = useState({});
+    const { user, dispatch } = useContext(AuthContext);
+    const [currentUser, setCurrentUser] = useState(user);
     const username = useParams().username;
+
     const handleLikeClick = () => {
-        setLike(isLiked ? like - 1 : like + 1);
+        try {
+            axios.put("/posts/" + post._id + "/like", {
+                userId: currentUser._id,
+            });
+        } catch (err) {
+            console.log(err);
+        }
+        setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
         setIsLiked(!isLiked);
     };
     useEffect(() => {
         const fetchUser = async () => {
             const res = await axios.get(`/users?userId=${post.userId}`);
-            setUser(res.data);
+            setCurrentUser(res.data);
         };
         fetchUser();
     }, [post.userId]);
+
     return (
         <div className={styles.wallContainer}>
             <div className={styles.wall__top}>
                 <div className={styles.top__left}>
-                    <Link to={username ? "" : `profile/${user.username}`}>
+                    <Link
+                        to={username ? "" : `profile/${currentUser.username}`}
+                    >
                         <img
                             src={
-                                user.profilePicture
-                                    ? USERS_FOLDER + user.profilePicture
+                                currentUser.profilePicture
+                                    ? USERS_FOLDER + currentUser.profilePicture
                                     : PUBLIC_FOLDER + IMG_NO_AVATAR
                             }
-                            alt=""
+                            alt={IMG_NO_AVATAR}
                             className={styles.left__avatar}
                         />
                     </Link>
 
-                    <div className={styles.left__name}>{user.username}</div>
+                    <div className={styles.left__name}>
+                        {currentUser.username}
+                    </div>
                     <div className={styles.left__date}>
                         {format(post.createdAt)}
                     </div>
@@ -63,7 +79,7 @@ export default function Wall(post) {
                             ? POSTS_FOLDER + post.img
                             : PUBLIC_FOLDER + IMG_NO_COVER
                     }
-                    alt=""
+                    alt={IMG_NO_COVER}
                     className={styles.center__img}
                 />
             </div>
@@ -82,7 +98,7 @@ export default function Wall(post) {
                         onClick={handleLikeClick}
                     />
                     <span className={styles.left__likeCounter}>
-                        {like} people liked it
+                        {likeCount} people liked it
                     </span>
                 </div>
                 <div className={styles.bottom__right}>
