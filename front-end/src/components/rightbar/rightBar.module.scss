@@ -35,7 +35,23 @@
         .friendsOnline__list {
         }
     }
-
+    .rightBar__follow {
+        background-color: $main-color;
+        color: white;
+        display: flex;
+        text-align: center;
+        align-items: center;
+        font-weight: 800;
+        border: none;
+        margin: 10px;
+        padding: 6px;
+        letter-spacing: 1px;
+        border-radius: 4px;
+        cursor: pointer;
+        &:hover {
+            box-shadow: 0 0 10px $shadow-color, 0 0 20px $shadow-color;
+        }
+    }
     .rightBar__info {
         display: flex;
         flex-direction: column;
@@ -88,6 +104,8 @@
                 .following__item__name {
                     margin-top: 6px;
                     font-weight: 10px;
+                    text-transform: capitalize;
+                    font-weight: 600;
                 }
             }
         }
