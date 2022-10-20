@@ -1,4 +1,43 @@
+/* const { Server } = require("socket.io");
+
+const io = new Server({
+    cors: {
+        origin: "http://localhost:3000",
+    },
+});
+let onlineUsers = [];
+
+const addNewUser = (username, socketId) => {
+    !onlineUsers.some((user) => user.username === username) &&
+        onlineUsers.push({ username, socketId });
+};
+const removeUser = (socketId) => {
+    onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
+};
+const getUser = (username) => {
+    return onlineUsers.find((user) => user.username === username);
+};
+
+io.on("connection", (socket) => {
+    socket.on("newUser", (username) => {
+        addNewUser(username, socket.id);
+    });
+    socket.on("sendNotification", ({ senderName, receiverName, type }) => {
+        const receiver = getUser(receiverName);
+        io.to(receiver.socketId).emit("getNotification", {
+            senderName,
+            type,
+        });
+    });
+    socket.on("disconnect", () => {
+        removeUser(socket.id);
+    });
+});
+io.listen(5000); */
+
 const express = require("express");
+const http = require("http");
+
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
@@ -72,6 +111,33 @@ app.get("/posts", (req, res) => {
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
+
+const server = http.createServer(app);
+
+const socketIo = require("socket.io")(server, {
+    cors: {
+        origin: "*",
+    },
+});
+
+socketIo.on("connection", (socket) => {
+    /*     console.log("New client connected" + socket.id);
+     */
+    socket.emit("setIdSocketId", socket.id);
+
+    socket.on("sendDataFromClient", function (data) {
+        console.log(data);
+        socketIo.emit("sendDataFromServer", { data });
+    });
+
+    socket.on("disconnect", () => {
+        console.log("Client disconnected");
+    });
+});
+
+server.listen(5000, () => {
+    console.log("Server socketIo chay tren cong 5000");
+});
 
 app.listen(8800, () => {
     console.log("Backend server is running!");
