@@ -10,11 +10,13 @@ import {
     EmojiEmotions,
     Cancel,
 } from "@material-ui/icons";
-export default function Post() {
-    const PF = process.env.REACT_APP_USERS_FOLDER;
+
+export default function Post(props) {
+    const USERS_FOLDER = process.env.REACT_APP_USERS_FOLDER;
     const { user } = useContext(AuthContext);
     const [file, setFile] = useState(null);
     const descRef = useRef();
+
     const submitHandler = async (e) => {
         e.preventDefault();
         const newPost = { userId: user._id, desc: descRef.current.value };
@@ -33,6 +35,9 @@ export default function Post() {
         try {
             postsCall(newPost);
             alert("The post has been upload success!!");
+            setFile(null);
+            descRef.current.value = "";
+            props.parentCallback();
             /*   
                     window.location.reload();
              */
@@ -44,7 +49,11 @@ export default function Post() {
         <div className={styles.postContainer}>
             <div className={styles.post__top}>
                 <img
-                    src={user ? PF + user.profilePicture : PF + IMG_NO_AVATAR}
+                    src={
+                        user
+                            ? USERS_FOLDER + user.profilePicture
+                            : USERS_FOLDER + IMG_NO_AVATAR
+                    }
                     alt={IMG_NO_AVATAR}
                     className={styles.top__avatar}
                 />
@@ -90,7 +99,8 @@ export default function Post() {
                                 } else {
                                     setFile(null);
                                 }
-                                console.log(imgFile);
+                                /*                                 console.log(imgFile);
+                                 */
                             }}
                         ></input>
                     </label>

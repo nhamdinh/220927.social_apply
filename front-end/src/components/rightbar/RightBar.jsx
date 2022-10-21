@@ -1,23 +1,113 @@
 import styles from "./rightBar.module.scss";
 import { Add, Remove } from "@material-ui/icons";
 import OnlineFriends from "./../onlineFriends/OnlineFriends";
-import { UsersOnline } from "./../../dummyData";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 
 import { IMG_GIFT, IMG_AD, IMG_NO_AVATAR } from "./../../const";
+import socketIOClient from "socket.io-client";
+
 export default function RightBar() {
+    const socketHost = process.env.REACT_APP_SOCKET_HOST;
+
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const USERS_FOLDER = process.env.REACT_APP_USERS_FOLDER;
     const usernameParams = useParams().username;
-    const { user, dispatch } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [currentUser, setCurrentUser] = useState(user);
     const [friends, setFriends] = useState([]);
     const [followed, setFollowed] = useState(null);
 
+    /*Server socketIo  */
+
+    const [socketUsernameTo, setSocketUsernameTo] = useState("");
+    const [stories, setStories] = useState([]);
+    const [message, setMessage] = useState("");
+    const [socketId, setIdSocketId] = useState();
+    const [messageBox, setMessageBox] = useState(false);
+    const socketRef = useRef();
+    const messagesEnd = useRef();
+    useEffect(() => {
+        const fetchUser = async () => {
+            if (usernameParams) {
+                try {
+                    const res = await axios.get(
+                        `/users?username=${usernameParams}`
+                    );
+                    setCurrentUser(res.data);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        };
+
+        fetchUser();
+    }, [usernameParams]);
+
+    useEffect(() => {
+        socketRef.current = socketIOClient.connect(socketHost);
+
+        socketRef.current.on("setIdSocketId", (data) => {
+            setIdSocketId(data);
+        });
+
+        socketRef.current.on("sendDataFromServer", (dataGot) => {
+            if (
+                user.username === dataGot.data.socket_username_to ||
+                user.username === dataGot.data.socket_username_from
+            ) {
+                setStories((oldMsgs) => [...oldMsgs, dataGot.data]);
+                if (user.username !== dataGot.data.socket_username_from) {
+                    setSocketUsernameTo(dataGot.data.socket_username_from);
+                }
+                setMessageBox(true);
+                scrollToBottom();
+            }
+        });
+
+        return () => {
+            socketRef.current.disconnect();
+        };
+    }, []);
+
+    const sendMessage = () => {
+        if (message !== null) {
+            const msg = {
+                socketId: socketId,
+                content: message,
+                socket_username_from: user.username,
+                socket_username_to: socketUsernameTo,
+            };
+            socketRef.current.emit("sendDataFromClient", msg);
+            setMessage("");
+        }
+    };
+    const scrollToBottom = () => {
+        messagesEnd.current.scrollIntoView({ behavior: "smooth" });
+    };
+    const renderStory = stories.map((story, index) => (
+        <div
+            key={index}
+            className={
+                story.socketId === socketId
+                    ? `${styles.your__message}`
+                    : `${styles.other__people}`
+            }
+        >
+            {story.content}
+        </div>
+    ));
+
+    const onEnterPress = (e) => {
+        if (e.keyCode === 13 && e.shiftKey === false) {
+            sendMessage();
+        }
+    };
+
+    /*Server socketIo  */
     const handleClick = async () => {
         try {
             if (followed) {
@@ -39,17 +129,15 @@ export default function RightBar() {
     };
     useEffect(() => {
         const fetchFriendsList = async () => {
-            if (usernameParams) {
-                try {
-                    if (currentUser._id) {
-                        const friendList = await axios.get(
-                            "/users/friends/" + currentUser._id
-                        );
-                        setFriends(friendList.data);
-                    }
-                } catch (err) {
-                    console.log(err);
+            try {
+                if (currentUser._id) {
+                    const friendList = await axios.get(
+                        "/users/friends/" + currentUser._id
+                    );
+                    setFriends(friendList.data);
                 }
+            } catch (err) {
+                console.log(err);
             }
         };
         fetchFriendsList();
@@ -128,31 +216,36 @@ export default function RightBar() {
                     </span>
                     <ul className={styles.rightBar__following__list}>
                         {friends.map((friend) => (
-                            <Link
+                            <li
                                 key={friend._id}
-                                to={"/profile/" + friend.username}
-                                style={{ textDecoration: "none" }}
+                                className={styles.rightBar__following__item}
                             >
-                                <li
-                                    className={styles.rightBar__following__item}
+                                <img
+                                    onClick={(event) => {
+                                        setSocketUsernameTo(friend.username);
+                                        setMessageBox(!messageBox);
+                                        setStories([]);
+                                    }}
+                                    src={
+                                        friend.profilePicture
+                                            ? USERS_FOLDER +
+                                              friend.profilePicture
+                                            : PUBLIC_FOLDER + IMG_NO_AVATAR
+                                    }
+                                    alt={IMG_NO_AVATAR}
+                                    className={styles.following__item__img}
+                                />
+                                <Link
+                                    to={"/profile/" + friend.username}
+                                    style={{ textDecoration: "none" }}
                                 >
-                                    <img
-                                        src={
-                                            friend.profilePicture
-                                                ? USERS_FOLDER +
-                                                  friend.profilePicture
-                                                : PUBLIC_FOLDER + IMG_NO_AVATAR
-                                        }
-                                        alt={IMG_NO_AVATAR}
-                                        className={styles.following__item__img}
-                                    />
                                     <span
                                         className={styles.following__item__name}
                                     >
                                         {friend.username}
                                     </span>
-                                </li>
-                            </Link>
+                                </Link>
+                            </li>
                         ))}
                     </ul>
                 </div>
@@ -160,6 +253,7 @@ export default function RightBar() {
         );
     };
     const HomeRightBar = () => {
+        console.log(friends);
         return (
             <>
                 <div className={styles.rightBar__birthday}>
@@ -183,12 +277,14 @@ export default function RightBar() {
                         online friends
                     </div>
                     <ul className={styles.friendsOnline__list}>
-                        {UsersOnline.map((user) => (
-                            <OnlineFriends
-                                key={user.id}
-                                use={user}
-                            ></OnlineFriends>
-                        ))}
+                        <ul className={styles.friendsOnline__list}>
+                            {friends.map((friend) => (
+                                <OnlineFriends
+                                    key={friend.id}
+                                    use={friend}
+                                ></OnlineFriends>
+                            ))}
+                        </ul>
                     </ul>
                 </div>
             </>
@@ -196,6 +292,44 @@ export default function RightBar() {
     };
     return (
         <div className={styles.rightBarContainer}>
+            {messageBox && (
+                <div className={styles.box__chat}>
+                    <p
+                        onClick={() => {
+                            setMessageBox(false);
+                            setStories([]);
+                        }}
+                        className={styles.box__chat__name}
+                    >
+                        {socketUsernameTo}
+                    </p>
+                    <div className={styles.box__chat_message}>
+                        {renderStory}
+
+                        <div
+                            style={{ float: "left", clear: "both" }}
+                            ref={messagesEnd}
+                        ></div>
+                    </div>
+
+                    <div className={styles.send__box}>
+                        <textarea
+                            value={message}
+                            onKeyDown={onEnterPress}
+                            onChange={(event) => {
+                                setMessage(event.target.value);
+                            }}
+                            placeholder="Enter message ..."
+                        />
+                        <button
+                            className={styles.send__box__button}
+                            onClick={sendMessage}
+                        >
+                            Send
+                        </button>
+                    </div>
+                </div>
+            )}
             {usernameParams ? <ProfileRightBar /> : <HomeRightBar />}
         </div>
     );

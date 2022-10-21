@@ -6,10 +6,18 @@ import axios from "axios";
 import { useParams } from "react-router";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+
 export default function Feed() {
     const usernameParams = useParams().username;
     const { user } = useContext(AuthContext);
     const [posts, setPosts] = useState([]);
+
+    const [reload, setReload] = useState(false);
+
+    const callbackReload = () => {
+        setReload(!reload);
+    };
+    console.log(reload);
     useEffect(() => {
         const fetchPosts = async () => {
             const res = usernameParams
@@ -23,11 +31,16 @@ export default function Feed() {
             );
         };
         fetchPosts();
-    }, [usernameParams]);
+    }, [usernameParams, reload]);
 
     return (
         <>
-            {usernameParams ? <ProfileBar></ProfileBar> : <Post></Post>}
+            {usernameParams ? (
+                <ProfileBar></ProfileBar>
+            ) : (
+                <Post parentCallback={callbackReload}></Post>
+            )}
+
             {posts.map((post) => (
                 <Wall key={post._id} post={post}></Wall>
             ))}
