@@ -3,8 +3,9 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 
 //create a post
-router.post("/", async (req, res) => {
+router.post("/create", async (req, res) => {
     const newPost = new Post(req.body);
+
     try {
         const savedPost = await newPost.save();
         res.status(200).json(savedPost);
@@ -70,7 +71,7 @@ router.get("/timeline/:userId", async (req, res) => {
 });
 
 //get user's all posts
-router.get("/profile/:username", async (req, res) => {
+router.get("/all/:username", async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username });
         const posts = await Post.find({ userId: user._id });

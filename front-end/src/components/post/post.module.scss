@@ -8,7 +8,7 @@ $margin: 10px;
     .post__top {
         display: flex;
         align-items: center;
-
+        overflow: hidden;
         .top__avatar {
             @include avatar_small;
             width: 48px;

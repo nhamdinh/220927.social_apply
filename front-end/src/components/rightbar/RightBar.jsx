@@ -253,7 +253,6 @@ export default function RightBar() {
         );
     };
     const HomeRightBar = () => {
-        console.log(friends);
         return (
             <>
                 <div className={styles.rightBar__birthday}>

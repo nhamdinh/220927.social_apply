@@ -1,10 +1,20 @@
 import styles from "./onlineFriends.module.scss";
+import { IMG_NO_AVATAR } from "./../../const";
 
 export default function OnlineFriends(use) {
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    use = use.use;
+    const USERS_FOLDER = process.env.REACT_APP_USERS_FOLDER;
     return (
         <li className={styles.friendsOnline__item}>
-            <img src={PF + use.img} alt="" className={styles.item__img} />
+            <img
+                src={
+                    use.profilePicture
+                        ? USERS_FOLDER + use.profilePicture
+                        : USERS_FOLDER + IMG_NO_AVATAR
+                }
+                alt={IMG_NO_AVATAR}
+                className={styles.item__img}
+            />
             <span className={styles.item__online}></span>
             <span className={styles.item__name}>{use.username}</span>
         </li>

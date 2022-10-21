@@ -19,16 +19,17 @@ export default function Wall(post) {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const POSTS_FOLDER = process.env.REACT_APP_POSTS_FOLDER;
     const USERS_FOLDER = process.env.REACT_APP_USERS_FOLDER;
+    const { user } = useContext(AuthContext);
+
     const [likeCount, setLikeCount] = useState(post.likes.length);
     const [isLiked, setIsLiked] = useState(false);
-    const { user, dispatch } = useContext(AuthContext);
-    const [currentUser, setCurrentUser] = useState(user);
+    const [currentUser, setCurrentUser] = useState({});
     const username = useParams().username;
 
     const handleLikeClick = () => {
         try {
             axios.put("/posts/" + post._id + "/like", {
-                userId: currentUser._id,
+                userId: user._id,
             });
         } catch (err) {
             console.log(err);

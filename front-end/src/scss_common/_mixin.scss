@@ -17,3 +17,10 @@ $topBar-height: 50px;
     margin: 10px;
     padding: 8px;
 }
+@mixin topBar__fixed {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    z-index: 999;
+}

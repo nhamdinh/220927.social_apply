@@ -11,7 +11,7 @@ export default function TopBar() {
     return (
         <div className={styles.topBarContainer}>
             <div className={styles.topBar__left}>
-                <Link to={"/"}>
+                <Link to={"/"} style={{ textDecoration: "none" }}>
                     <span className={styles.left__logo}>bonjour social</span>
                 </Link>
             </div>

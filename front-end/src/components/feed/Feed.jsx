@@ -17,7 +17,6 @@ export default function Feed() {
     const callbackReload = () => {
         setReload(!reload);
     };
-    console.log(reload);
     useEffect(() => {
         const fetchPosts = async () => {
             const res = usernameParams

@@ -7,8 +7,8 @@
     background-color: $main-color;
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
     .topBar__left {
-        flex: 2;
         .left__logo {
             padding: 10px 20px;
             text-transform: capitalize;
@@ -21,8 +21,7 @@
     }
 
     .topBar__center {
-        flex: 5;
-
+        flex: 1;
         .center__searchBar {
             height: 30px;
             background-color: white;
@@ -44,7 +43,6 @@
     }
 
     .topBar__right {
-        flex: 5;
         color: white;
         display: flex;
         align-items: center;
@@ -94,5 +92,11 @@
                 box-shadow: 0 0 10px violet, 0 0 20px violet, 0 0 40px violet;
             }
         }
+    }
+}
+@media screen and (max-width: 1023px) {
+    .topBar__center,
+    .right__links {
+        display: none !important;
     }
 }

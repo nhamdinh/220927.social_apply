@@ -13,8 +13,12 @@ export default function ProfileBar() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const res = await axios.get(`/users?username=${username}`);
-            setUserFetch(res.data);
+            try {
+                const res = await axios.get(`/users?username=${username}`);
+                setUserFetch(res.data);
+            } catch (err) {
+                console.log(err);
+            }
         };
         /* console.log("1--", user.username);
         console.log("2--", username); */
