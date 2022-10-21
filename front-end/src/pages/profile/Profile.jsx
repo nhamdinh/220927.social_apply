@@ -15,13 +15,19 @@ export default function Profile() {
             <div className={styles.profileContainer}>
                 <div className={`${styles.grid__1200} ${styles.wide}`}>
                     <div className={`${styles.grid__row} `}>
-                        <div className={`${styles.grid__col} ${styles.l__3}`}>
+                        <div
+                            className={`${styles.grid__col} ${styles.l__3} ${styles.m__0} ${styles.s__0}`}
+                        >
                             <SideBar> </SideBar>
                         </div>
-                        <div className={`${styles.grid__col} ${styles.l__6}`}>
+                        <div
+                            className={`${styles.grid__col} ${styles.l__6} ${styles.m__9} ${styles.s__9}`}
+                        >
                             <Feed></Feed>
                         </div>
-                        <div className={`${styles.grid__col} ${styles.l__2}`}>
+                        <div
+                            className={`${styles.grid__col} ${styles.l__3} ${styles.m__3} ${styles.s__3}`}
+                        >
                             <RightBar></RightBar>
                         </div>
                     </div>

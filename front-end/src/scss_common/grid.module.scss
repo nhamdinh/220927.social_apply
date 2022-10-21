@@ -1,12 +1,10 @@
 .grid__1200 {
     display: block;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 .grid__1200.wide {
-    /* max-width: 1200px;
-    margin: 0 auto; */
+    max-width: 1200px;
+    margin: 0 auto;
 }
 .grid__row {
     display: flex;
@@ -18,6 +16,7 @@
 }
 .grid__col {
     padding: 0 4px;
+    margin: 0 -4px;
 }
 .grid__row.no__gutters .grid__col {
     padding: 0;
@@ -81,6 +80,7 @@
     }
     .grid__col {
         padding: 0 8px;
+        margin: 0 -8px;
     }
     .m__0 {
         display: none;
@@ -196,6 +196,7 @@
     }
     .wide .grid__col {
         padding: 0 8px;
+        margin: 0 -8px;
     }
 
     .wide .l__0 {
@@ -310,6 +311,7 @@
     }
     .grid__col {
         padding: 0 12px;
+        margin: 0 -12px;
     }
 
     .l__0 {

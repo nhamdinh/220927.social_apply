@@ -24,7 +24,7 @@ export default function Login() {
             <div className={`${styles.grid__1200} ${styles.wide}`}>
                 <div className={`${styles.grid__row} `}>
                     <div
-                        className={`${styles.grid__col} ${styles.l__6} ${styles.m__5} ${styles.s__12}`}
+                        className={`${styles.grid__col} ${styles.l__6} ${styles.m__6} ${styles.s__12}`}
                     >
                         <div className={styles.login__left}>
                             <div className={styles.login__left__logo}>
@@ -37,7 +37,7 @@ export default function Login() {
                         </div>
                     </div>
                     <div
-                        className={`${styles.grid__col} ${styles.l__5} ${styles.m__5} ${styles.s__12}`}
+                        className={`${styles.grid__col} ${styles.l__6} ${styles.m__6} ${styles.s__12}`}
                     >
                         <form
                             className={styles.login__right}
