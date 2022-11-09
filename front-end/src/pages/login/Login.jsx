@@ -1,30 +1,20 @@
 import styles from "./login.module.scss";
-import { useRef, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import { loginCall } from "../../apiCalls";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { CircularProgress } from "@material-ui/core";
 import { connect } from "react-redux";
 import { fetchUser } from "./../../redux/actions/actions";
+import { CircularProgress } from "@material-ui/core";
 
 const Login = ({ authReducer, fetchUser }) => {
   const email = useRef();
   const password = useRef();
-  const { user, isFetching, error, dispatch } = useContext(AuthContext);
-  console.log(authReducer);
   const handleClick = (e) => {
     e.preventDefault();
-     fetchUser({
+    fetchUser({
       email: email.current.value,
       password: password.current.value,
-    }); 
-    loginCall(
-      {
-        email: email.current.value,
-        password: password.current.value,
-      },
-      dispatch
-    );
+    });
+
   };
   return (
     <div className={styles.loginContainer}>
@@ -69,9 +59,9 @@ const Login = ({ authReducer, fetchUser }) => {
                 <button
                   type="submit"
                   className={styles.right__input__signIn}
-                  disabled={isFetching}
+                  disabled={authReducer.isFetching}
                 >
-                  {isFetching ? <CircularProgress color="inherit" /> : "Log In"}
+                  {authReducer.isFetching ? <CircularProgress color="inherit" /> : "Log In"}
                 </button>
                 <Link to="/register" className={styles.right__input__signUp}>
                   Create a New account

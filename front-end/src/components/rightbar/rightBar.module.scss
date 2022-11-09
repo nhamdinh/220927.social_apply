@@ -97,6 +97,7 @@
                     height: 60px;
                     border-radius: 4px;
                     object-fit: cover;
+                    margin-bottom: 10px;
                     cursor: pointer;
                     &:hover {
                         box-shadow: 0 0 10px black;
@@ -110,7 +111,7 @@
                     font-weight: 600;
                     &:hover {
                         color: red;
-                        font-size: 20px;
+                        scale: 1.05;
                     }
                 }
             }

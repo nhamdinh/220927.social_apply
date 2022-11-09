@@ -4,24 +4,23 @@ import Wall from "./../wall/Wall";
 import ProfileBar from "./../profilebar/ProfileBar";
 import axios from "axios";
 import { useParams } from "react-router";
-import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { useState, useEffect } from "react";
+import { connect } from "react-redux";
 
-export default function Feed() {
+const Feed = ({authReducer}) => {
     const usernameParams = useParams().username;
-    const { user } = useContext(AuthContext);
     const [posts, setPosts] = useState([]);
-
     const [reload, setReload] = useState(false);
 
     const callbackReload = () => {
         setReload(!reload);
     };
+    
     useEffect(() => {
         const fetchPosts = async () => {
             const res = usernameParams
                 ? await axios.get(`/posts/all/${usernameParams}`)
-                : await axios.get(`/posts/all/${user.username}`);
+                : await axios.get(`/posts/all/${authReducer.user.username}`);
 
             setPosts(
                 res.data.sort((p1, p2) => {
@@ -46,3 +45,10 @@ export default function Feed() {
         </>
     );
 }
+const mapStateToProps = (state) => {
+    return {
+      authReducer: state.authReducer,
+    };
+  };
+
+export default connect(mapStateToProps, null)(Feed);

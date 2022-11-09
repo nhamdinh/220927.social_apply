@@ -1,23 +1,21 @@
 import styles from "./rightBar.module.scss";
 import { Add, Remove } from "@material-ui/icons";
 import OnlineFriends from "./../onlineFriends/OnlineFriends";
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router";
-import { AuthContext } from "../../context/AuthContext";
-
-import { IMG_GIFT, IMG_AD, IMG_NO_AVATAR } from "./../../const";
+import { connect } from "react-redux";
 import socketIOClient from "socket.io-client";
+import { IMG_GIFT, IMG_AD, IMG_NO_AVATAR } from "./../../const";
 
-export default function RightBar() {
-    const socketHost = process.env.REACT_APP_SOCKET_HOST;
+const RightBar = ({authReducer}) => {
+    const SOCKET_HOST = process.env.REACT_APP_SOCKET_HOST;
 
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const USERS_FOLDER = process.env.REACT_APP_USERS_FOLDER;
     const usernameParams = useParams().username;
-    const { user } = useContext(AuthContext);
-    const [currentUser, setCurrentUser] = useState(user);
+    const [currentUser, setCurrentUser] = useState(authReducer.user);
     const [friends, setFriends] = useState([]);
     const [followed, setFollowed] = useState(null);
 
@@ -27,6 +25,7 @@ export default function RightBar() {
     const [stories, setStories] = useState([]);
     const [message, setMessage] = useState("");
     const [socketId, setIdSocketId] = useState();
+    console.log(socketId);
     const [messageBox, setMessageBox] = useState(false);
     const socketRef = useRef();
     const messagesEnd = useRef();
@@ -48,19 +47,19 @@ export default function RightBar() {
     }, [usernameParams]);
 
     useEffect(() => {
-        socketRef.current = socketIOClient.connect(socketHost);
+        socketRef.current = socketIOClient.connect(SOCKET_HOST);
 
-        socketRef.current.on("setIdSocketId", (data) => {
-            setIdSocketId(data);
+        socketRef.current.on("setIdSocketId", (socketId) => {
+            setIdSocketId(socketId);
         });
 
         socketRef.current.on("sendDataFromServer", (dataGot) => {
             if (
-                user.username === dataGot.data.socket_username_to ||
-                user.username === dataGot.data.socket_username_from
+                authReducer.user.username === dataGot.data.socket_username_to ||
+                authReducer.user.username === dataGot.data.socket_username_from
             ) {
                 setStories((oldMsgs) => [...oldMsgs, dataGot.data]);
-                if (user.username !== dataGot.data.socket_username_from) {
+                if (authReducer.user.username !== dataGot.data.socket_username_from) {
                     setSocketUsernameTo(dataGot.data.socket_username_from);
                 }
                 setMessageBox(true);
@@ -78,7 +77,7 @@ export default function RightBar() {
             const msg = {
                 socketId: socketId,
                 content: message,
-                socket_username_from: user.username,
+                socket_username_from: authReducer.user.username,
                 socket_username_to: socketUsernameTo,
             };
             socketRef.current.emit("sendDataFromClient", msg);
@@ -111,16 +110,16 @@ export default function RightBar() {
     const handleClick = async () => {
         try {
             if (followed) {
-                await axios.put(`/users/${user._id}/unfollow`, {
+                await axios.put(`/users/${authReducer.user._id}/unfollow`, {
                     userId: currentUser._id,
                 });
-                /*                 dispatch({ type: "UNFOLLOW", payload: user._id });
+                /*                 dispatch({ type: "UNFOLLOW", payload: authReducer.user._id });
                  */ setFollowed(!followed);
             } else {
-                await axios.put(`/users/${user._id}/follow`, {
+                await axios.put(`/users/${authReducer.user._id}/follow`, {
                     userId: currentUser._id,
                 });
-                /*                 dispatch({ type: "FOLLOW", payload: user._id });
+                /*                 dispatch({ type: "FOLLOW", payload: authReducer.user._id });
                  */ setFollowed(!followed);
             }
         } catch (err) {
@@ -141,8 +140,8 @@ export default function RightBar() {
             }
         };
         fetchFriendsList();
-        setFollowed([...currentUser.followings].includes(user._id));
-    }, [currentUser, user]);
+        setFollowed([...currentUser.followings].includes(authReducer.user._id));
+    }, [currentUser, authReducer.user]);
     useEffect(() => {
         const fetchUser = async () => {
             if (usernameParams) {
@@ -162,7 +161,7 @@ export default function RightBar() {
     const ProfileRightBar = () => {
         return (
             <>
-                {user.username !== currentUser.username && (
+                {authReducer.user.username !== currentUser.username && (
                     <button
                         className={styles.rightBar__follow}
                         onClick={handleClick}
@@ -173,7 +172,7 @@ export default function RightBar() {
                 )}
                 <div className={styles.rightBar__info}>
                     <div className={styles.rightBar__info__title}>
-                        {user.username === currentUser.username
+                        {authReducer.user.username === currentUser.username
                             ? "your "
                             : currentUser.username + "'s "}
                         information
@@ -209,7 +208,7 @@ export default function RightBar() {
                 </div>
                 <div className={styles.rightBar__following}>
                     <span className={styles.rightBar__following__title}>
-                        {user.username === currentUser.username
+                        {authReducer.user.username === currentUser.username
                             ? "your "
                             : currentUser.username + "'s "}
                         friends list
@@ -279,7 +278,7 @@ export default function RightBar() {
                         <ul className={styles.friendsOnline__list}>
                             {friends.map((friend) => (
                                 <OnlineFriends
-                                    key={friend.id}
+                                    key={friend._id}
                                     use={friend}
                                 ></OnlineFriends>
                             ))}
@@ -333,3 +332,10 @@ export default function RightBar() {
         </div>
     );
 }
+const mapStateToProps = (state) => {
+    return {
+      authReducer: state.authReducer,
+    };
+  };
+
+export default connect(mapStateToProps, null)(RightBar);

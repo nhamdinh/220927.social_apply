@@ -1,13 +1,14 @@
 import styles from "./profileBar.module.scss";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import axios from "axios";
 import { IMG_NO_AVATAR, IMG_NO_COVER } from "./../../const";
-import { AuthContext } from "../../context/AuthContext";
-export default function ProfileBar() {
+import { connect } from "react-redux";
+import axios from "axios";
+import {API_fetchUserByUsername} from "./../../apiCalls"
+
+const ProfileBar = ({authReducer}) => {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const USERS_FOLDER = process.env.REACT_APP_USERS_FOLDER;
-    const { user } = useContext(AuthContext);
     const username = useParams().username;
     const [userFetch, setUserFetch] = useState({});
 
@@ -20,12 +21,17 @@ export default function ProfileBar() {
                 console.log(err);
             }
         };
-        /* console.log("1--", user.username);
-        console.log("2--", username); */
-        if (user.username !== username) {
-            fetchUser();
-        } else {
-            setUserFetch(user);
+       
+        if (authReducer.user.username !== username) {
+          /*   console.log(`/users?username=${username}`);
+                const res =   API_fetchUserByUsername(username);
+
+                console.log(res.data);
+                setUserFetch(res.data);  */
+       
+          fetchUser();
+       } else {
+            setUserFetch(authReducer.user);
         }
     }, [username]);
     return (
@@ -58,3 +64,10 @@ export default function ProfileBar() {
         </div>
     );
 }
+const mapStateToProps = (state) => {
+    return {
+      authReducer: state.authReducer,
+    };
+  };
+
+export default connect(mapStateToProps, null)(ProfileBar);

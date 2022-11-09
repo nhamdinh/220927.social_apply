@@ -1,8 +1,8 @@
 import styles from "./post.module.scss";
-import { AuthContext } from "./../../context/AuthContext";
-import { useContext, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { uploadCall, postsCall } from "./../../apiCalls";
 import { IMG_NO_AVATAR } from "./../../const";
+import { connect } from "react-redux";
 import {
     PermMedia,
     Label,
@@ -11,15 +11,14 @@ import {
     Cancel,
 } from "@material-ui/icons";
 
-export default function Post(props) {
+const Post = ({authReducer, parentCallback}) => {
     const USERS_FOLDER = process.env.REACT_APP_USERS_FOLDER;
-    const { user } = useContext(AuthContext);
     const [file, setFile] = useState(null);
     const descRef = useRef();
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const newPost = { userId: user._id, desc: descRef.current.value };
+        const newPost = { userId: authReducer.user._id, desc: descRef.current.value };
         if (file) {
             const data = new FormData();
             const fileName = Date.now() + file.name;
@@ -37,7 +36,7 @@ export default function Post(props) {
             alert("The post has been upload success!!");
             setFile(null);
             descRef.current.value = "";
-            props.parentCallback();
+            parentCallback();
             /*   
                     window.location.reload();
              */
@@ -50,8 +49,8 @@ export default function Post(props) {
             <div className={styles.post__top}>
                 <img
                     src={
-                        user
-                            ? USERS_FOLDER + user.profilePicture
+                        authReducer.user
+                            ? USERS_FOLDER + authReducer.user.profilePicture
                             : USERS_FOLDER + IMG_NO_AVATAR
                     }
                     alt={IMG_NO_AVATAR}
@@ -59,7 +58,7 @@ export default function Post(props) {
                 />
 
                 <input
-                    placeholder={"What's in your mind " + user.username + " ?"}
+                    placeholder={"What's in your mind " + authReducer.user.username + " ?"}
                     ref={descRef}
                     type="text"
                     className={styles.top__input}
@@ -133,3 +132,10 @@ export default function Post(props) {
         </div>
     );
 }
+const mapStateToProps = (state) => {
+    return {
+      authReducer: state.authReducer,
+    };
+  };
+
+export default connect(mapStateToProps, null)(Post);

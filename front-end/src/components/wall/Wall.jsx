@@ -1,11 +1,10 @@
 import styles from "./wall.module.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { format } from "timeago.js";
-import { AuthContext } from "../../context/AuthContext";
-
+import { connect } from "react-redux";
 import {
     IMG_NO_AVATAR,
     IMG_NO_COVER,
@@ -14,12 +13,10 @@ import {
 } from "./../../const";
 import { MoreVert } from "@material-ui/icons";
 
-export default function Wall(post) {
-    post = post.post;
+const Wall = ({post,authReducer}) => {
     const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
     const POSTS_FOLDER = process.env.REACT_APP_POSTS_FOLDER;
     const USERS_FOLDER = process.env.REACT_APP_USERS_FOLDER;
-    const { user } = useContext(AuthContext);
 
     const [likeCount, setLikeCount] = useState(post.likes.length);
     const [isLiked, setIsLiked] = useState(false);
@@ -29,7 +26,7 @@ export default function Wall(post) {
     const handleLikeClick = () => {
         try {
             axios.put("/posts/" + post._id + "/like", {
-                userId: user._id,
+                userId: authReducer.user._id,
             });
         } catch (err) {
             console.log(err);
@@ -109,3 +106,10 @@ export default function Wall(post) {
         </div>
     );
 }
+const mapStateToProps = (state) => {
+    return {
+      authReducer: state.authReducer,
+    };
+  };
+
+export default connect(mapStateToProps, null)(Wall);
